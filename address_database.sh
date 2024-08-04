@@ -10,6 +10,9 @@ makeLogs(){
 }
 
 makeDatabase(){
+    if [ ! -d Database ]; then
+        mkdir Database
+    fi
     if [ ! -f "Database/Database.csv" ]; then
         touch "Database/Database.csv"
         echo "Name,Email,Tel No,Mobile No,Address,Message" >> "Database/Database.csv"
