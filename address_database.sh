@@ -21,31 +21,42 @@ makeDatabase(){
 }
 
 addEntry(){
-    # name=''
-    # email=''
-    # tel=''
-    # mob=''
-    # address=''
-    # msg=''
-    # while (true);
-    #     do
-    #         echo "Database Project"
-    #         echo
-    #         echo "Add new Entry Screen"
-    #         echo 
-    #         echo "1. Name           : $name"       
-    #         echo "2. Email          : $email"       
-    #         echo "3. Tel No         : $tel"       
-    #         echo "4. Moblie No      : $mob"       
-    #         echo "5. Address        : $address"       
-    #         echo "6. Message        : $msg"
-    #         echo -e "\033[0;31mx\033[0m. Exit"
-    #         echo
-    #         echo -n "Please choose a Field to be added: "
-    #         read idx
-    #         clear
-    #     done
-    echo "TODO"
+    name=''
+    email=''
+    tel=''
+    mob=''
+    address=''
+    msg=''
+    tarr=("Name" "Email" "Tel No" "Mobile No" "Adress" "Message")
+    varr=()
+    idx=0
+    while [ $idx -le 5 ]  
+        do
+        echo "Database Project"
+        echo
+        echo "Add new Entry Screen"
+        echo 
+        echo "1. Name           : $name "       
+        echo "2. Email          : $email "       
+        echo "3. Tel No         : $tel "       
+        echo "4. Moblie No      : $mob "       
+        echo "5. Address        : $address "       
+        echo "6. Message        : $msg "
+        echo
+        field=${tarr[$idx]} 
+        echo -n "Please choose a $field to be added: " 
+        read fill
+        clear
+        varr[$idx]+=$fill
+        name=${varr[0]}
+        email=${varr[1]}
+        tel=${varr[2]}
+        mob=${varr[3]}
+        address=${varr[4]}
+        msg=${varr[5]}
+        (( idx++ ))
+    done
+    echo "$name,$email,$tel,$mob,$address,$msg" >> Database/Database.csv
 }
 
 searchOrEditEntry(){
