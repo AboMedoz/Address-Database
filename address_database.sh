@@ -139,6 +139,8 @@ searchOrEditEntry(){
         echo
         echo -e "\033[0;31mSearch\033[0m/Edit"
         echo 
+        echo "Note: If you Don't Find your Matching Info Try Searching using another Field"
+        echo
         echo "1. Name           : "       
         echo "2. Email          : "       
         echo "3. Tel No         : "       
