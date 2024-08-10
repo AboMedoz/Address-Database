@@ -67,7 +67,7 @@ addEntry(){
     varr=()
     idx=0
     loop(){
-    while [ $idx -le 5 ]; do
+        while [ $idx -le 5 ]; do
             echo "Database Project"
             echo
             echo "Add new Entry Screen"
@@ -130,11 +130,151 @@ addEntry(){
     }
     loop
     echo "$name,$email,$tel,$mob,$address,$msg" >> Database/Database.csv
+    clear
 }
 
 searchOrEditEntry(){
-    #TODO
-    echo "TODO"
+    searchScreen(){
+        echo "Database Project"
+        echo
+        echo -e "\033[0;31mSearch\033[0m/Edit"
+        echo 
+        echo "1. Name           : "       
+        echo "2. Email          : "       
+        echo "3. Tel No         : "       
+        echo "4. Moblie No      : "       
+        echo "5. Address        : "       
+        echo "6. Message        : "
+        echo
+    }
+    searchScreen
+    echo -n "Enter Search Info: "
+    read info
+    query=`grep -m 1 "$info" Database/Database.csv`
+    if [ -z $query ]; then
+        echo "No Matching Found"
+        echo
+        searchScreen
+    fi
+    IFS=',' read -r name email tel mob address msg <<< "$query"
+    clear
+    editScreen(){
+        echo "Database Project"
+        echo
+        echo -e "Search/\033[0;31mEdit\033[0m"
+        echo 
+        echo "1. Name           : $name "       
+        echo "2. Email          : $email"       
+        echo "3. Tel No         : $tel"       
+        echo "4. Moblie No      : $mob"       
+        echo "5. Address        : $address"       
+        echo "6. Message        : $msg"
+        echo -e "\033[0;31mx\033[0m. Exit"
+        echo
+        echo -n "Enter the Field Number you Want to edit: "
+        read -n 1 idx 
+        if [ $idx -eq 1 ]; then
+            echo
+            enterName(){
+                echo -n "Enter the New Name: "
+                read newname
+                nameValidation $newname
+            }
+            enterName
+            if [ $? -eq 1 ]; then 
+                echo "Please Enter a Valid Name"
+                echo
+                enterName
+            fi
+            awk -F, -v OFS=, -v target="$name" -v anewname=$newname  'NR == 1  { print; next } { if ($1 == target){ $1 = anewname } print }' "Database/Database.csv" > Database/temp.csv && mv Database/temp.csv Database/Database.csv
+            name=$newname
+            clear
+            editScreen
+        elif [ $idx -eq 2 ]; then
+            echo
+            enterEmail(){
+                echo -n "Enter the New Email: "
+                read newemail
+                emailValidation $newemail
+            }
+            enterEmail
+            if [ $? -eq 1 ]; then 
+                echo "Please Enter a Valid Email"
+                echo
+                enterEmail
+            fi
+        awk -F, -v OFS=, -v target="$name" -v anewemail=$newemail 'NR == 1  { print; next } { if ($1 == target){ $2 = anewemail } print }' "Database/Database.csv" > Database/temp.csv && mv Database/temp.csv Database/Database.csv
+        email=$newemail
+        clear
+        editScreen
+        elif [ $idx -eq 3 ]; then
+            echo
+            enterTel(){
+                echo -n "Enter the New Tel No: "
+                read newtel
+                numberValidation $newtel
+            }
+            enterTel
+            if [ $? -eq 1 ]; then 
+                echo "Please Enter a Valid Tel No"
+                echo
+                enterTel
+            fi
+        awk -F, -v OFS=, -v target="$name" -v anewtel=$newtel  'NR == 1  { print; next } { if ($1 == target){ $3 = anewtel } print }' "Database/Database.csv" > Database/temp.csv && mv Database/temp.csv Database/Database.csv
+        tel=$newtel
+        clear
+        editScreen
+        elif [ $idx -eq 4 ]; then
+            echo
+            enterMob(){
+                echo -n "Enter the New Mobile No: "
+                read newmob
+                mobileValidation $newmob
+            }
+            enterMob
+            if [ $? -eq 1 ]; then 
+                echo "Please Enter a Valid Mobile No"
+                echo
+                enterMob
+            fi
+            awk -F, -v OFS=, -v target="$name" -v anewmob=$newmob  'NR == 1  { print; next } { if ($1 == target){ $4 = anewmob } print }' "Database/Database.csv" > Database/temp.csv && mv Database/temp.csv Database/Database.csv
+            mob=$newmob
+            clear
+            editScreen
+        elif [ $idx -eq 5 ]; then
+            echo
+            enterAdress(){
+                echo -n "Enter the New Adress: "
+                read newadress
+            }
+            enterAdress
+            awk -F, -v OFS=, -v target="$name" -v anewaddress=$newadress  'NR == 1  { print; next } { if ($1 == target){ $5 = anewaddress } print }' "Database/Database.csv" > Database/temp.csv && mv Database/temp.csv Database/Database.csv
+            address=$newadress
+            clear
+            editScreen 
+        elif [ $idx -eq 6 ]; then
+            echo
+            enterMessage(){
+                echo -n "Enter the New Message: "
+                read newmsg
+            }
+            enterMessage
+            awk -F, -v OFS=, -v target="$name" -v anewmsg=$newmsg  'NR == 1  { print; next } { if ($1 == target){ $6 = anewmsg } print }' "Database/Database.csv" > Database/temp.csv && mv Database/temp.csv Database/Database.csv
+            msg=$newmsg
+            clear
+            editScreen
+        elif [[ "$idx" = "x" || "$idx" = "X" ]]; then
+            clear 
+            exit
+            echo "$currentdate || Scrpit Exited"
+        else
+            clear
+            echo "Please enter A Valid Field Number"
+            echo
+            editScreen
+        fi
+    }
+    editScreen
 }
 
 main(){
