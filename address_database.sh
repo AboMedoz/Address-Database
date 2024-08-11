@@ -130,6 +130,7 @@ addEntry(){
     }
     loop
     echo "$name,$email,$tel,$mob,$address,$msg" >> Database/Database.csv
+    echo "$currentdate || Entry Created" >> database.log
     clear
 }
 
